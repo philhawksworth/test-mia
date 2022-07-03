@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const fs = require('fs');
 
 const eleventyImg = require('@11ty/eleventy-img');
 const _ = require('lodash');
@@ -77,11 +78,27 @@ const image = (
     },
   };
 
-  // generate images; this is async but we don’t wait
-  eleventyImg(fullSrc, opts);
-
+  
   // eslint-disable-next-line no-sync
   const metadata = eleventyImg.statsSync(fullSrc, opts);
+  
+  // We need to know what the resultant files for each format a size will be called.
+  // Let's take a peep.
+  for (const [format, options] of Object.entries(metadata)) {
+
+    // for each format, let's look at each file size and get its outputPath
+    metadata[format].forEach(thisSize => {
+      // If the file has already been added to the build directory, we won't repeat that effort
+      if (fs.existsSync(thisSize.outputPath)) {
+        console.log(`Skipping processing for cached image: ${src}`);
+      } else {
+        console.log(`Processing image: `, thisSize.outputPath);
+        // generate images; this is async but we don’t wait
+        eleventyImg(fullSrc, opts);
+      }
+    });
+  }
+  
 
   if (getUrl) {
     const data = metadata.jpeg[metadata.jpeg.length - 1];
