@@ -82,6 +82,7 @@ const image = (
 
   // eslint-disable-next-line no-sync
   const metadata = eleventyImg.statsSync(fullSrc, opts);
+  
 
   // We need to know what the resultant files for each format
   // / and size will be called. Let's take a peep.
@@ -109,6 +110,7 @@ const image = (
       }
     });
   }
+
 
   if (getUrl) {
     const data = metadata.jpeg[metadata.jpeg.length - 1];
