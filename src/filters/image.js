@@ -18,7 +18,7 @@ const imgOptions = {
 };
 const IMG_SRC = './content/images/';
 
-const imageTransformIndex = [];
+let imageTransformIndex = [];
 
 /* @docs
 label: image
@@ -91,15 +91,11 @@ const image = (
     metadata[format].forEach((thisSize) => {
       // If the file has already been added to the build directory, we won't repeat that effort
       if (fs.existsSync(thisSize.outputPath)) {
-        console.log(
-          `Skipping processing for cached image: ${src} (${thisSize.filename})`,
-        );
+        console.log(`Skipping processing for cached image: ${src} (${thisSize.filename})`);
       }
       // If this image has been requested for processing already, let's not duplicate effort
       else if (imageTransformIndex.includes(thisSize.filename)) {
-        console.log(
-          `Skipping processing for duplicate image: ${src} (${thisSize.filename})`,
-        );
+        console.log(`Skipping processing for duplicate image: ${src} (${thisSize.filename})` );
       }
       // generate images; this is async but we don’t wait
       // Make a note that we're generating this image to avoid dupes
